@@ -4,15 +4,17 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { config } from 'dotenv';
 
-config(); // Loads .env
+config(); 
 
 const app = express();
 
-// ✅ CORS setup - allow frontend access
+
+
 app.use(cors({
-  origin: 'http://localhost:5179',
-  credentials: true,
+  origin: 'http://localhost:5173',  // Use your actual frontend URL
+  credentials: true
 }));
+
 
 
 // ✅ Middleware
@@ -21,7 +23,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ✅ Routes
+import problemRoutes from './routes/problemRoutes.js'
 import userRoutes from './routes/userRoutes.js';
 app.use('/api/auth', userRoutes); // localhost:8080/api/auth/register
+
+app.use('/api/problems', problemRoutes);
+
+
+
 
 export default app;

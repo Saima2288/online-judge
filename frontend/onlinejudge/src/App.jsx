@@ -1,11 +1,17 @@
 // src/App.jsx
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import Register from './pages/Login/Register/Register';
 import Login from './pages/Login/Login';
-import Home from './components/Home';  // Import the new Home component
-import './App.css'
+import Home from './components/Home';
+
+// Import problem pages
+import ProblemsList from './pages/Problems/ProblemsList';
+import ProblemView from './pages/Problems/ProblemView';
+
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -30,7 +36,12 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register onRegister={handleLogin} />} />
-            {/* Add protected routes here, like /problems, /profile, etc. */}
+
+            {/* Problems routes */}
+            <Route path="/problems" element={<ProblemsList />} />
+            <Route path="/problems/:problemNumber" element={<ProblemView />} />
+
+            {/* You can add other routes here */}
           </Routes>
         </div>
       </div>
