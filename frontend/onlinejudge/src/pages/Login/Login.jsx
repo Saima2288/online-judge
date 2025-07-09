@@ -17,7 +17,7 @@ const Login = ({ onLogin }) => {
     const data = await loginUser({ email, password });
 
     if (!data.error && data.token) {
-      onLogin(data.user, data.user.isAdmin);
+      onLogin(data.user);
       localStorage.setItem('token', data.token);
       navigate('/');
     } else {
@@ -76,3 +76,5 @@ const Login = ({ onLogin }) => {
 };
 
 export default Login;
+
+

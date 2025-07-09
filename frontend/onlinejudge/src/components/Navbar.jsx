@@ -21,7 +21,6 @@ const Navbar = () => {
 
       <div className="flex space-x-4">
         <NavLink to="/profile" className="hover:text-indigo-300">Profile</NavLink>
-        <NavLink to="/admin" className="hover:text-indigo-300">Admin</NavLink>
         <NavLink
           to="/login"
           className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500 transition font-semibold"

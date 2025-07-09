@@ -2,14 +2,14 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Navbar from './components/Navbar';
-import Register from './pages/Login/Register/Register';
-import Login from './pages/Login/Login';
-import Home from './components/Home';
+import Navbar from './components/Navbar.jsx';
+import Register from './pages/Login/Register/Register.jsx';
+import Login from './pages/Login/Login.jsx';
+import Home from './components/Home.jsx';
 
-// Import problem pages
-import ProblemsList from './pages/Problems/ProblemsList';
-import ProblemView from './pages/Problems/ProblemView';
+// Problem pages
+import ProblemsList from './pages/Problems/ProblemsList.jsx';
+import ProblemView from './pages/Problems/ProblemView.jsx';
 
 import './App.css';
 
@@ -29,19 +29,19 @@ function App() {
 
   return (
     <Router>
-      <div className="app">
+      <div className="app min-h-screen bg-gray-900 text-white">
         <Navbar user={user} isAdmin={isAdmin} handleLogout={handleLogout} />
-        <div className="content">
+        <div className="content p-4">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register onRegister={handleLogin} />} />
 
-            {/* Problems routes */}
-            <Route path="/problems" element={<ProblemsList />} />
-            <Route path="/problems/:problemNumber" element={<ProblemView />} />
+            {/* Problems Routes */}
+            <Route path="/problems" element={<ProblemsList user={user} isAdmin={isAdmin} />} />
+            <Route path="/problems/:problemNumber" element={<ProblemView user={user} />} />
 
-            {/* You can add other routes here */}
+            {/* Additional routes can go here */}
           </Routes>
         </div>
       </div>

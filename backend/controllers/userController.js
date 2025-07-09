@@ -1,4 +1,4 @@
-import { registerUser, loginUser } from "../services/userService.js";
+import { registerUser, loginUser, getCurrentUser as getUserById } from "../services/userService.js";
 
 export const register = async (req, res) => {
   try {
@@ -19,6 +19,24 @@ export const login = async (req, res) => {
       sameSite: "strict",
     };
     res.status(200).cookie("token", data.token, cookieOptions).json({ success: true, message: "Login successful", ...data });
+  } catch (err) {
+    res.status(err.status || 500).json({ success: false, message: err.message });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({ success: true, message: "Logout successful" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Logout failed" });
+  }
+};
+
+export const getCurrentUser = async (req, res) => {
+  try {
+    const user = await getUserById(req.user._id);
+    res.status(200).json({ success: true, user });
   } catch (err) {
     res.status(err.status || 500).json({ success: false, message: err.message });
   }

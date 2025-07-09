@@ -18,7 +18,7 @@ const Register = ({ onRegister }) => {
     const data = await registerUser({ email, username, password });
 
     if (!data.error && data.token) {
-      onRegister(data.user, data.user.isAdmin);
+      onRegister(data.user);
       localStorage.setItem('token', data.token);
       navigate('/');
     } else {
@@ -87,3 +87,5 @@ const Register = ({ onRegister }) => {
 };
 
 export default Register;
+
+
