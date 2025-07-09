@@ -23,7 +23,7 @@ export const createSubmission = async (req, res) => {
       });
     }
 
-    // Validate the submission
+    // Use the same validation logic as run/submit
     const result = await submitService.validateSubmission(problemNumber, code, language);
 
     // Create submission record
@@ -41,26 +41,33 @@ export const createSubmission = async (req, res) => {
       message: result.message
     });
 
-    res.status(201).json({
-      success: true,
-      message: 'Submission created successfully',
-      submission: {
-        _id: submission._id,
-        status: submission.status,
-        passedTests: submission.passedTests,
-        totalTests: submission.totalTests,
-        executionTime: submission.executionTime,
-        message: submission.message,
-        createdAt: submission.createdAt
-      }
-    });
+    // Return the same format as run/submit but with submission info
+    const responseData = {
+      result: result.status,
+      message: result.message,
+      passedTests: result.passedTests,
+      totalTests: result.totalTests,
+      executionTime: result.executionTime,
+      testResults: result.testResults,
+      submissionId: submission._id,
+      createdAt: submission.createdAt
+    };
+
+    // Add failedTestCases for wrong answers
+    if (result.status === 'Wrong Answer') {
+      responseData.failedTestCases = result.testResults.filter(test => !test.passed);
+    }
+
+    res.status(200).json(responseData);
 
   } catch (error) {
     console.error('Submission creation error:', error);
+    
+    // Return error in the same format as run/submit
     res.status(500).json({ 
-      success: false, 
-      message: 'Failed to create submission',
-      error: error.message 
+      error: error.message,
+      result: 'Error',
+      message: 'Compilation or runtime error occurred'
     });
   }
 };

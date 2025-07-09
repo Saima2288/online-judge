@@ -10,6 +10,20 @@ const axiosInstance = axios.create({
   },
 });
 
+// Add request interceptor to include auth token
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // ------------------------ AUTH ------------------------
 export const loginUser = async (credentials) => {
   try {
@@ -29,6 +43,17 @@ export const registerUser = async (userData) => {
   } catch (error) {
     return {
       error: error.response?.data?.message || 'Registration failed',
+    };
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    const response = await axiosInstance.post('/api/auth/logout');
+    return response.data;
+  } catch (error) {
+    return {
+      error: error.response?.data?.message || 'Logout failed',
     };
   }
 };
@@ -84,6 +109,7 @@ export const submitCode = async ({ code, language = 'cpp', problemNumber }) => {
   }
 
   try {
+    // Always use the authenticated submissions endpoint for logged-in users
     const response = await axiosInstance.post('/api/submissions/', {
       code,
       language,

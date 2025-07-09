@@ -30,7 +30,7 @@ export const registerUser = async ({ username, firstName, lastName, email, passw
     password: hashedPassword,
   });
 
-  const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
 
@@ -53,19 +53,14 @@ export const loginUser = async ({ username, password }) => {
     throw { status: 400, message: "Enter both username and password" };
   }
 
-  // Try to find user by username or email
-  const user = await User.findOne({
-    $or: [
-      { username: username.toLowerCase() },
-      { email: username.toLowerCase() }
-    ]
-  });
+  // Find user by username
+  const user = await User.findOne({ username: username.toLowerCase() });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw { status: 401, message: "Invalid username/email or password" };
+    throw { status: 401, message: "Invalid username or password" };
   }
 
-  const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
 

@@ -4,6 +4,8 @@ import { registerUser } from '../../../api';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Register = ({ onRegister }) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -15,12 +17,12 @@ const Register = ({ onRegister }) => {
     e.preventDefault();
     setError('');
 
-    const data = await registerUser({ email, username, password });
+    const data = await registerUser({ firstName, lastName, email, username, password });
 
-    if (!data.error && data.token) {
-      onRegister(data.user);
-      localStorage.setItem('token', data.token);
-      navigate('/');
+    if (!data.error && data.success) {
+      // Show success message and redirect to login
+      alert('Account created successfully! Please login with your username and password.');
+      navigate('/login');
     } else {
       setError(data.error || 'Registration failed');
     }
@@ -32,11 +34,21 @@ const Register = ({ onRegister }) => {
         <h2 className="text-3xl font-semibold mb-6 text-center text-indigo-400">Register on YourCode</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block mb-1 text-sm">Username</label>
+            <label className="block mb-1 text-sm">First Name</label>
             <input
               type="text"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+              required
+              className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-sm">Last Name</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
               required
               className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -47,6 +59,16 @@ const Register = ({ onRegister }) => {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-sm">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
               required
               className="w-full px-4 py-2 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
@@ -87,5 +109,6 @@ const Register = ({ onRegister }) => {
 };
 
 export default Register;
+
 
 

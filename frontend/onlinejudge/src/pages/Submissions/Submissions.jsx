@@ -1,28 +1,36 @@
 import { useState, useEffect } from 'react';
 import { fetchSubmissions } from '../../api';
 import { FaCheck, FaTimes, FaClock, FaCode, FaEye } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-const Submissions = () => {
+const Submissions = ({ user }) => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedProblem, setSelectedProblem] = useState('');
-  const [problems, setProblems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Redirect if not logged in
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     loadSubmissions();
-  }, [currentPage, selectedProblem]);
+  }, [currentPage, selectedProblem, user, navigate]);
 
   const loadSubmissions = async () => {
+    if (!user) return;
+    
     setLoading(true);
     try {
-      const data = await fetchSubmissions(currentPage, 10, selectedProblem || null);
+      const data = await fetchSubmissions();
       if (data.success) {
-        setSubmissions(data.submissions);
-        setTotalPages(data.totalPages);
-        setCurrentPage(parseInt(data.currentPage));
+        setSubmissions(data.submissions || []);
+        setTotalPages(data.totalPages || 1);
+        setCurrentPage(parseInt(data.currentPage) || 1);
       } else {
         setError(data.message || 'Failed to load submissions');
       }
@@ -69,6 +77,18 @@ const Submissions = () => {
     return new Date(dateString).toLocaleString();
   };
 
+  // If not logged in, show loading (will redirect)
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-400">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (loading && submissions.length === 0) {
     return (
       <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
@@ -107,11 +127,7 @@ const Submissions = () => {
                   className="px-4 py-2 rounded-lg bg-gray-700/50 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">All Problems</option>
-                  {problems.map(problem => (
-                    <option key={problem.problemNumber} value={problem.problemNumber}>
-                      Problem {problem.problemNumber}
-                    </option>
-                  ))}
+                  {/* We can add problem filtering later */}
                 </select>
               </div>
             </div>
@@ -122,6 +138,12 @@ const Submissions = () => {
               <FaCode className="text-6xl text-gray-600 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-300 mb-2">No submissions yet</h3>
               <p className="text-gray-500">Start solving problems to see your submission history here.</p>
+              <button
+                onClick={() => navigate('/problems')}
+                className="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-semibold transition"
+              >
+                Browse Problems
+              </button>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -181,10 +203,10 @@ const Submissions = () => {
                       <td className="px-6 py-4">
                         <button
                           className="inline-flex items-center gap-2 px-3 py-1 rounded text-sm text-blue-400 hover:text-blue-300 hover:bg-blue-500/20 transition-colors"
-                          onClick={() => {/* TODO: View submission details */}}
+                          onClick={() => navigate(`/problems/${submission.problemNumber}`)}
                         >
                           <FaEye size={14} />
-                          View
+                          View Problem
                         </button>
                       </td>
                     </tr>

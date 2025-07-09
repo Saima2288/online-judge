@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: [true, "first name is required"],
-      trim: true, // remove whitespaces from beginning
+      trim: true,
       minlength: [2, "first name must have atleast 2 letters"],
       maxlength: [50, "the name cannot exceed 50 characters"],
     },
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
-      lowercase: true, // Convert to lowercase before saving
+      lowercase: true,
       trim: true,
       match: [
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
      }
   },
   {
-    timestamps: true, // <-- this is the correct place for this option
+    timestamps: true,
   }
 );
 
