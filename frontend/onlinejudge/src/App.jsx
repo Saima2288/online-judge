@@ -18,6 +18,7 @@ import AdminView from './pages/Admin/AdminView.jsx';
 import EditProblemPage from './pages/Admin/EditProblemPage.jsx';
 import ProblemsEditList from './pages/Admin/ProblemsEditList.jsx';
 import { getCurrentUser } from './api';
+import Leaderboard from './pages/Leaderboard/Leaderboard.jsx';
 
 import './App.css';
 
@@ -77,6 +78,9 @@ function App() {
 
           {/* Submissions Route */}
           <Route path="/submissions" element={<Submissions user={user} />} />
+
+          {/* Leaderboard Route */}
+          <Route path="/leaderboard" element={<Leaderboard />} />
 
           {/* Admin Panel Route */}
           <Route path="/admin/panel" element={user && user.role === 'admin' ? <AdminView /> : <div>Access denied</div>} />
