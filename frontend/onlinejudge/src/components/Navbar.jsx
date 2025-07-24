@@ -32,6 +32,9 @@ const Navbar = ({ user, onLogout }) => {
         <NavLink to="/contests" className="hover:text-indigo-300">Contests</NavLink>
         <NavLink to="/leaderboard" className="hover:text-indigo-300">Leaderboard</NavLink>
         <NavLink to="/discuss" className="hover:text-indigo-300">Discuss</NavLink>
+        {user && user.role === 'admin' && (
+          <NavLink to="/admin/panel" className="hover:text-indigo-300 font-bold">Admin Panel</NavLink>
+        )}
       </div>
 
       <div className="flex items-center space-x-4">

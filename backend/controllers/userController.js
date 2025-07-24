@@ -1,4 +1,5 @@
 import { registerUser, loginUser, getCurrentUser as getUserById } from "../services/userService.js";
+import User from '../models/user.js';
 
 export const register = async (req, res) => {
   try {
@@ -39,5 +40,14 @@ export const getCurrentUser = async (req, res) => {
     res.status(200).json({ success: true, user });
   } catch (err) {
     res.status(err.status || 500).json({ success: false, message: err.message });
+  }
+};
+
+export const getUserCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to get user count' });
   }
 };

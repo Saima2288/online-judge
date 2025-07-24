@@ -1,16 +1,7 @@
 import * as problemService from '../services/problemService.js';
+import fs from 'fs';
+import Problem from '../models/problem.js';
 
-// Create a new problem
-export const createProblem = async (req, res) => {
-  try {
-    const problem = await problemService.createProblemService(req.body);
-    res.status(201).json(problem);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// Get all problems
 export const getAllProblems = async (req, res) => {
   try {
     const problems = await problemService.getAllProblemsService();
@@ -20,7 +11,6 @@ export const getAllProblems = async (req, res) => {
   }
 };
 
-// Get problem by problemNumber
 export const getProblemByNumber = async (req, res) => {
   try {
     const problemNumber = parseInt(req.params.problemNumber);
@@ -34,35 +24,6 @@ export const getProblemByNumber = async (req, res) => {
   }
 };
 
-// Update problem by problemNumber
-export const updateProblemByNumber = async (req, res) => {
-  try {
-    const problemNumber = parseInt(req.params.problemNumber);
-    const updated = await problemService.updateProblemByNumberService(problemNumber, req.body);
-    if (!updated) {
-      return res.status(404).json({ error: 'Problem not found' });
-    }
-    res.status(200).json(updated);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// Delete problem by problemNumber
-export const deleteProblemByNumber = async (req, res) => {
-  try {
-    const problemNumber = parseInt(req.params.problemNumber);
-    const deleted = await problemService.deleteProblemByNumberService(problemNumber);
-    if (!deleted) {
-      return res.status(404).json({ error: 'Problem not found' });
-    }
-    res.status(200).json({ message: 'Problem deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Get problems by difficulty
 export const getProblemsByDifficulty = async (req, res) => {
   try {
     const difficulty = req.params.difficulty;
@@ -73,7 +34,6 @@ export const getProblemsByDifficulty = async (req, res) => {
   }
 };
 
-// Get problems by topic
 export const getProblemsByTopic = async (req, res) => {
   try {
     const topic = req.params.topic;
@@ -84,7 +44,6 @@ export const getProblemsByTopic = async (req, res) => {
   }
 };
 
-// Get problems by company
 export const getProblemsByCompany = async (req, res) => {
   try {
     const company = req.params.company;
@@ -95,7 +54,6 @@ export const getProblemsByCompany = async (req, res) => {
   }
 };
 
-// Search problems by title
 export const searchProblemsByTitle = async (req, res) => {
   try {
     const { query } = req.query;
@@ -106,7 +64,6 @@ export const searchProblemsByTitle = async (req, res) => {
   }
 };
 
-// Get problems by category
 export const getProblemsByCategory = async (req, res) => {
   try {
     const category = req.params.category;

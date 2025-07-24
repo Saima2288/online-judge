@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar.jsx';
 import Register from './pages/Login/Register/Register.jsx';
@@ -20,12 +20,10 @@ function App() {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check for existing token on app load
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       // You could verify the token here if needed
-      // For now, we'll just check if it exists
     }
   }, []);
 
@@ -41,27 +39,25 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className="app min-h-screen bg-gray-900 text-white">
-        <Navbar user={user} onLogout={handleLogout} />
-        <div className="content p-4">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route path="/register" element={<Register onRegister={handleLogin} />} />
+    <div className="app min-h-screen bg-gray-900 text-white">
+      {user && <Navbar user={user} onLogout={handleLogout} />}
+      <div className="content p-4">
+        <Routes>
+          <Route path="/" element={<Home user={user} />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/register" element={<Register onRegister={handleLogin} />} />
 
-            {/* Problems Routes */}
-            <Route path="/problems" element={<ProblemsList user={user} isAdmin={isAdmin} />} />
-            <Route path="/problems/:problemNumber" element={<ProblemView user={user} />} />
+          {/* Problems Routes */}
+          <Route path="/problems" element={<ProblemsList user={user} isAdmin={isAdmin} />} />
+          <Route path="/problems/:problemNumber" element={<ProblemView user={user} />} />
 
-            {/* Submissions Route */}
-            <Route path="/submissions" element={<Submissions user={user} />} />
+          {/* Submissions Route */}
+          <Route path="/submissions" element={<Submissions user={user} />} />
 
-            {/* Additional routes can go here */}
-          </Routes>
-        </div>
+          {/* Additional routes can go here */}
+        </Routes>
       </div>
-    </Router>
+    </div>
   );
 }
 
