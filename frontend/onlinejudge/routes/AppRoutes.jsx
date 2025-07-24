@@ -11,7 +11,6 @@ import ProblemView from '../pages/Problems/ProblemView';
 import Contests from '../pages/Contests/Contests';
 import Submissions from '../pages/Submissions/Submissions';
 import Leaderboard from '../pages/Leaderboard/Leaderboard';
-import Discuss from '../pages/Discuss/Discuss';
 import AdminPanel from '../pages/AdminPanel';
 
 import Profile from '../pages/Profile/Profile';
@@ -29,13 +28,12 @@ const AppRoutes = ({ user, isAdmin, handleLogout, handleLogin }) => {
             <Route path="/" element={<Home user={user} />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register onRegister={handleLogin} />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/leaderboard" element={<Leaderboard user={user} />} />
             <Route path="/contests" element={<Contests />} />
             {user && <>
               <Route path="/problems" element={<ProblemsList user={user} />} />
               <Route path="/problems/:problemNumber" element={<ProblemView user={user} />} />
               <Route path="/submissions" element={<Submissions user={user} />} />
-              <Route path="/discuss" element={<Discuss user={user} />} />
               <Route path="/admin/panel" element={user.role === 'admin' ? <AdminPanel /> : <div>Access denied</div>} />
               <Route path="/profile" element={<Profile user={user} />} />
             </>}

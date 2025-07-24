@@ -1,6 +1,7 @@
 import Submission from '../models/submission.js';
 import Problem from '../models/problem.js';
 import submitService from '../services/submitService.js';
+import User from '../models/user.js';
 
 export const createSubmission = async (req, res) => {
   try {
@@ -136,5 +137,35 @@ export const getSubmissionById = async (req, res) => {
       message: 'Failed to get submission',
       error: error.message 
     });
+  }
+}; 
+
+export const getLeaderboard = async (req, res) => {
+  try {
+    // Aggregate unique accepted problems per user
+    const solved = await Submission.aggregate([
+      { $match: { status: 'Accepted' } },
+      { $group: { _id: { user: '$user', problemNumber: '$problemNumber' } } },
+      { $group: { _id: '$_id.user', solvedCount: { $sum: 1 } } },
+      { $sort: { solvedCount: -1 } },
+      { $limit: 50 }
+    ]);
+
+    // Get user details
+    const userIds = solved.map(s => s._id);
+    const users = await User.find({ _id: { $in: userIds } }, 'username firstName lastName');
+    const userMap = Object.fromEntries(users.map(u => [u._id.toString(), u]));
+
+    const leaderboard = solved.map(s => ({
+      userId: s._id,
+      username: userMap[s._id]?.username || 'Unknown',
+      firstName: userMap[s._id]?.firstName || '',
+      lastName: userMap[s._id]?.lastName || '',
+      solvedCount: s.solvedCount
+    }));
+
+    res.json({ leaderboard });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch leaderboard' });
   }
 }; 

@@ -1,8 +1,11 @@
 import express from 'express';
-import { createSubmission, getUserSubmissions, getSubmissionById } from '../controllers/submissionController.js';
+import { createSubmission, getUserSubmissions, getSubmissionById, getLeaderboard } from '../controllers/submissionController.js';
 import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Public leaderboard route
+router.get('/leaderboard', getLeaderboard);
 
 // All submission routes require authentication
 router.use(auth);

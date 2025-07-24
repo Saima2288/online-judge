@@ -144,3 +144,45 @@ export const fetchSubmissionById = async (submissionId) => {
     };
   }
 };
+
+// ------------------------ ADMIN ------------------------
+export const fetchUserCount = async () => {
+  try {
+    const response = await axiosInstance.get('/api/auth/count');
+    return response.data.count;
+  } catch (error) {
+    return 0;
+  }
+};
+
+export const updateProblem = async (problemNumber, payload) => {
+  try {
+    const response = await axiosInstance.put(`/api/problems/${problemNumber}`, payload);
+    return response.data;
+  } catch (error) {
+    return {
+      error: error.response?.data?.error || 'Error updating problem.'
+    };
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const response = await axiosInstance.get('/api/auth/me');
+    if (response.data && response.data.success && response.data.user) {
+      return response.data.user;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const fetchLeaderboard = async () => {
+  try {
+    const response = await axiosInstance.get('/api/submissions/leaderboard');
+    return response.data.leaderboard;
+  } catch (error) {
+    return [];
+  }
+};

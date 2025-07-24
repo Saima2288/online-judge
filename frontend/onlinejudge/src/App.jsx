@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 import Navbar from './components/Navbar.jsx';
 import Register from './pages/Login/Register/Register.jsx';
@@ -14,28 +14,52 @@ import ProblemView from './pages/Problems/ProblemView.jsx';
 // Submissions page
 import Submissions from './pages/Submissions/Submissions.jsx';
 
+import AdminView from './pages/Admin/AdminView.jsx';
+import EditProblemPage from './pages/Admin/EditProblemPage.jsx';
+import ProblemsEditList from './pages/Admin/ProblemsEditList.jsx';
+import { getCurrentUser } from './api';
+
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // You could verify the token here if needed
+      getCurrentUser().then(currentUser => {
+        if (currentUser) {
+          setUser(currentUser);
+          setIsAdmin(currentUser.role === 'admin');
+        } else {
+          setUser(null);
+          setIsAdmin(false);
+        }
+      });
+    } else {
+      setUser(null);
+      setIsAdmin(false);
     }
   }, []);
 
   const handleLogin = (userData) => {
     setUser(userData);
     setIsAdmin(userData.role === 'admin');
+    if (userData.role === 'admin') {
+      navigate('/admin/panel');
+    } else {
+      navigate('/problems');
+    }
   };
 
   const handleLogout = () => {
     setUser(null);
     setIsAdmin(false);
     localStorage.removeItem('token');
+    navigate('/');
   };
 
   return (
@@ -54,7 +78,10 @@ function App() {
           {/* Submissions Route */}
           <Route path="/submissions" element={<Submissions user={user} />} />
 
-          {/* Additional routes can go here */}
+          {/* Admin Panel Route */}
+          <Route path="/admin/panel" element={user && user.role === 'admin' ? <AdminView /> : <div>Access denied</div>} />
+          <Route path="/admin/panel/edit/:problemNumber" element={<EditProblemPage />} />
+          <Route path="/admin/panel/problems" element={<ProblemsEditList />} />
         </Routes>
       </div>
     </div>

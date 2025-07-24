@@ -19,7 +19,11 @@ const Login = ({ onLogin }) => {
     if (!data.error && data.token) {
       onLogin(data.user);
       localStorage.setItem('token', data.token);
-      navigate('/');
+      if (data.user.role === 'admin') {
+        navigate('/admin/panel');
+      } else {
+        navigate('/problems');
+      }
     } else {
       setError(data.error || 'Invalid credentials');
     }
