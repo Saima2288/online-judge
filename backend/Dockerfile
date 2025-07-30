@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -12,17 +12,23 @@ RUN apk update && apk add --no-cache \
     openjdk17-jdk
 
 # Copy dependency files
-COPY package.json ./
-COPY package-lock.json ./ 
+COPY package*.json ./
 
 # Install node dependencies
-RUN npm install
+RUN npm ci --only=production
 
 # Copy the rest of the app
 COPY . .
 
-# Expose port (make sure your server runs on this)
+# Create necessary directories
+RUN mkdir -p codes outputs uploads
+
+# Expose port
 EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8080/api/problems', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
 # Start the server
 CMD ["node", "server.js"]
