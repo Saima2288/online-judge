@@ -39,4 +39,4 @@ async function submitSolution(req, res) {
   }
 }
 
-export default { submitSolution };
+export default { submitSolution }; // export this function

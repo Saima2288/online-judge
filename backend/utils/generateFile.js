@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Directory to store all generated code files
-const dirCodes = path.join(__dirname, '..', 'codes');
+const dirCodes = path.join(__dirname, '..', 'codes');  // /oj/codes 
 
 // Create the directory if it doesn't exist
 if (!fs.existsSync(dirCodes)) {
@@ -34,7 +34,7 @@ export const generateFile = (language, content) => {
     
     const extension = extensionMap[language] || language;
     const filename = `${jobID}.${extension}`;
-    const filePath = path.join(dirCodes, filename);
+    const filePath = path.join(dirCodes, filename);  //oj/codes/32145.cpp
     fs.writeFileSync(filePath, content); // write the code into the file
     return filePath;
 };

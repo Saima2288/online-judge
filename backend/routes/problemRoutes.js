@@ -9,10 +9,9 @@ import {
 
 const router = express.Router();
 
-router.get('/', getAllProblems);
-router.get('/difficulty/:difficulty', getProblemsByDifficulty);
-router.get('/category/:category', getProblemsByCategory);
-router.get('/company/:company', getProblemsByCompany);
-router.get('/:problemNumber', getProblemByNumber);
-
+router.get('/', getAllProblems); //problems
+router.get('/difficulty/:difficulty', getProblemsByDifficulty);//  /problems/difficulty/:difficulty   req.params.difficulty
+router.get('/category/:category', getProblemsByCategory);// /problems/cataegory/:category    req.params.category
+router.get('/company/:company', getProblemsByCompany);//  /problems/company/:company   req.params.difficulty
+router.get('/:problemNumber', getProblemByNumber);//  /problems/:problemNumber   req.params.id
 export default router;
