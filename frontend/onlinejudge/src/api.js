@@ -1,11 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://ec2-3-110-176-239.ap-south-1.compute.amazonaws.com:8080'; // Hardcoded for testing
-
-// Debug logging
-console.log('Environment Variables:', import.meta.env);
-console.log('VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
-console.log('Final API_BASE_URL:', API_BASE_URL);
+const API_BASE_URL = 'http://127.0.0.1:8080'; // Update if needed
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
