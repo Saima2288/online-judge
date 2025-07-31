@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8080'; // Use environment variable or fallback to localhost
+const API_BASE_URL = 'http://ec2-3-110-176-239.ap-south-1.compute.amazonaws.com:8080'; // Hardcoded for testing
 
 // Debug logging
 console.log('Environment Variables:', import.meta.env);
