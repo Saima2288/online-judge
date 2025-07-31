@@ -22,9 +22,7 @@ import Leaderboard from './pages/Leaderboard/Leaderboard.jsx';
 
 import './App.css';
 
-// Debug: Log the API URL
-console.log('VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
-console.log('Current API Base URL:', import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8080');
+
 
 function App() {
   const [user, setUser] = useState(null);
