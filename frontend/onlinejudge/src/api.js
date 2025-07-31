@@ -2,6 +2,11 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8080'; // Use environment variable or fallback to localhost
 
+// Debug logging
+console.log('Environment Variables:', import.meta.env);
+console.log('VITE_BACKEND_URL:', import.meta.env.VITE_BACKEND_URL);
+console.log('Final API_BASE_URL:', API_BASE_URL);
+
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
